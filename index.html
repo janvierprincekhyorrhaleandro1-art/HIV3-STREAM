@@ -1,0 +1,749 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#02050a">
+<title>HIV3 — Streaming</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<!--
+  HIV3-STREAM SINGLE PAGE APPLICATION
+  All previous HTML pages are now views inside this file:
+  Home, Trending, Movies, TV Series, Animation, Search, Downloads,
+  Profile and Movie/Series Watch/Detail.
+
+  API routes wired by the inline SPA controller:
+  GET /home
+  GET /movies
+  GET /tv-series
+  GET /animation
+  GET /search/suggest?q=
+  GET /search?q=&page=
+  GET /detail/{slug}
+  GET /api/stream/{subject_id}
+  GET /api/stream/{subject_id}/captions
+-->
+<section id="home-view" class="spa-view">
+<section class="category-section"><div class="category-list">
+<button class="category-btn active" data-action="home" data-endpoint="/home">Home</button>
+<button class="category-btn" data-action="trending" data-endpoint="/home">Trending</button>
+<button class="category-btn" data-action="movies" data-endpoint="/movies">Movies</button>
+<button class="category-btn" data-action="tv-series" data-endpoint="/tv-series">TV Series</button>
+<button class="category-btn" data-action="animation" data-endpoint="/animation">Animation</button>
+<button class="category-btn" data-action="search" data-endpoint="/search">Search</button>
+</div></section>
+<section class="hero"><img class="hero-image" src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1400&q=85" alt="Cinematic landscape"><div class="hero-shade"></div><div class="hero-blue-glow"></div><div class="hero-content"><p class="eyebrow"><span></span> HIV3 FEATURED</p><h1>THE LAST<br>FRONTIER</h1><div class="hero-meta"><span>2026</span><b>•</b><span>Action</span><b>•</b><span>2h 08m</span></div><p class="hero-copy">Beyond the edge of the known world, a new story begins.</p><div class="hero-actions"><button class="primary-action" data-action="play" data-endpoint="/api/stream/{subject_id}">▶ &nbsp;Play</button><button class="secondary-action" data-action="details" data-endpoint="/detail/{slug}">More Info</button></div></div><div class="hero-dots"><i class="active"></i><i></i><i></i><i></i></div></section>
+<section class="explore-section"><div class="section-heading compact-heading"><h2>EXPLORE</h2></div><div class="genre-list"><button class="genre-btn active" data-genre="Action">Action</button><button class="genre-btn" data-genre="Drama">Drama</button><button class="genre-btn" data-genre="Romance">Romance</button><button class="genre-btn" data-genre="Comedy">Comedy</button><button class="genre-btn" data-genre="Horror">Horror</button><button class="genre-btn" data-genre="Sci-Fi">Sci-Fi</button><button class="genre-btn" data-genre="Thriller">Thriller</button><button class="genre-btn" data-genre="Adventure">Adventure</button><button class="genre-btn" data-genre="Fantasy">Fantasy</button></div></section>
+<section class="content-section" id="trending"><div class="section-heading"><div><h2>Trending Now</h2><p>What people are watching</p></div><button class="see-all" data-action="trending" data-endpoint="/home">See all <span>→</span></button></div><div class="movie-row" id="trending-container">
+<article class="movie-card"><div class="poster"><img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=500&q=80" alt="Poster"><span class="rank">1</span></div><h3>Dune: Part Two</h3><p>2024 · Sci-Fi</p></article>
+<article class="movie-card"><div class="poster"><img src="https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=500&q=80" alt="Poster"><span class="rank">2</span></div><h3>The Night Agent</h3><p>2023 · Action</p></article>
+<article class="movie-card"><div class="poster"><img src="https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&w=500&q=80" alt="Poster"><span class="rank">3</span></div><h3>Fallout</h3><p>2024 · Adventure</p></article>
+<article class="movie-card"><div class="poster"><img src="https://images.unsplash.com/photo-1440404653325-ab127d49abc1?auto=format&fit=crop&w=500&q=80" alt="Poster"><span class="rank">4</span></div><h3>The Last Frontier</h3><p>2026 · Drama</p></article>
+</div></section>
+<section class="content-section"><div class="section-heading"><div><h2>Continue Watching</h2><p>Pick up where you left off</p></div><button class="see-all" data-action="continue">See all <span>→</span></button></div><div class="continue-row">
+<article class="continue-card"><div class="continue-image"><img src="https://images.unsplash.com/photo-1485846234645-a62644f84728?auto=format&fit=crop&w=700&q=80" alt="Continue"><button class="mini-play" data-action="play">▶</button></div><div class="progress"><span style="width:68%"></span></div><div class="continue-meta"><h3>Last Horizon</h3><span>68%</span></div><p>S1 · E9</p></article>
+<article class="continue-card"><div class="continue-image"><img src="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=700&q=80" alt="Continue"><button class="mini-play" data-action="play">▶</button></div><div class="progress"><span style="width:42%"></span></div><div class="continue-meta"><h3>Dark Matter</h3><span>42%</span></div><p>S2 · E5</p></article>
+<article class="continue-card"><div class="continue-image"><img src="https://images.unsplash.com/photo-1511497584788-876760111969?auto=format&fit=crop&w=700&q=80" alt="Continue"><button class="mini-play" data-action="play">▶</button></div><div class="progress"><span style="width:76%"></span></div><div class="continue-meta"><h3>Northbound</h3><span>76%</span></div><p>S3 · E4</p></article>
+</div></section>
+<section class="content-section"><div class="section-heading"><div><h2>Popular Movies</h2><p>Top picks for you</p></div><button class="see-all" data-action="movies" data-endpoint="/movies">See all <span>→</span></button></div><div class="movie-row" id="popular-container">
+<article class="movie-card"><div class="poster"><img src="https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=600&q=80" alt="Popular"><span class="rating">8.8</span></div><h3>Interstellar</h3><p>2014 · Sci-Fi</p></article>
+<article class="movie-card"><div class="poster"><img src="https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=600&q=80" alt="Popular"><span class="rating">8.7</span></div><h3>Inception</h3><p>2010 · Action</p></article>
+<article class="movie-card"><div class="poster"><img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=600&q=80" alt="Popular"><span class="rating">9.0</span></div><h3>The Dark Knight</h3><p>2008 · Action</p></article>
+<article class="movie-card"><div class="poster"><img src="https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=600&q=80" alt="Popular"><span class="rating">8.4</span></div><h3>Gladiator</h3><p>2000 · Drama</p></article>
+</div></section>
+<section class="api-status"><div><span class="status-dot"></span> HIV3 API READY</div><small>JS integration comes next</small></section>
+</section>
+
+<section id="search-view" class="spa-view" hidden>
+  <header class="profile-header">
+    <button class="header-back spa-back" type="button" aria-label="Back to Home"><i class="fa-solid fa-chevron-left"></i></button>
+    <div class="header-title"><span>SEARCH</span></div>
+    <button class="header-action" type="button" data-action="clear-search" aria-label="Clear search"><i class="fa-solid fa-xmark"></i></button>
+  </header>
+  <main class="profile-content search-content">
+    <div class="search-box">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <input id="searchInput" type="search" placeholder="Search movies, series..." autocomplete="off">
+    </div>
+    <div id="searchSuggestions" class="search-suggestions"></div>
+    <section class="content-section search-results-section">
+      <div class="section-heading"><div><h2>SEARCH RESULTS</h2><p id="searchStatus">Type a title to search</p></div></div>
+      <div class="movie-row search-results-row" id="searchResults"></div>
+    </section>
+  </main>
+</section>
+
+<section id="category-view" class="spa-view" hidden>
+  <section class="category-result-head">
+    <div><span class="eyebrow"><span></span> HIV3 COLLECTION</span><h1 id="categoryTitle">Movies</h1><p id="categorySubtitle">Explore the latest collection.</p></div>
+    <button class="secondary-action" id="categoryBackHome" type="button">Home</button>
+  </section>
+  <section class="explore-section category-explore">
+    <div class="section-heading compact-heading"><h2 id="categoryExploreTitle">EXPLORE</h2></div>
+    <div class="genre-list" id="categoryGenres"></div>
+  </section>
+  <section class="content-section">
+    <div class="section-heading"><div><h2 id="categorySectionTitle">Movies</h2><p id="categorySectionMeta">Loading...</p></div></div>
+    <div class="movie-row category-results-row" id="categoryResults"></div>
+  </section>
+</section>
+
+<section id="downloads-view" class="spa-view" hidden>
+  <header class="profile-header">
+    <button class="header-back spa-back" type="button" aria-label="Back to Home"><i class="fa-solid fa-chevron-left"></i></button>
+    <div class="header-title"><span>DOWNLOADS</span></div>
+    <button class="header-action" type="button" aria-label="Download settings"><i class="fa-solid fa-ellipsis"></i></button>
+  </header>
+  <main class="downloads-content"><!-- STORAGE / STATUS -->
+        <section class="storage-card">
+
+            <div class="storage-top">
+
+                <div>
+                    <span class="eyebrow">OFFLINE LIBRARY</span>
+                    <h1>Your Downloads</h1>
+                </div>
+
+                <div class="storage-icon">
+                    <i class="fa-solid fa-download"></i>
+                </div>
+
+            </div>
+
+            <div class="storage-meter">
+                <div class="storage-meter-fill"></div>
+            </div>
+
+            <div class="storage-info">
+                <span>0 downloads</span>
+                <span>Nothing stored</span>
+            </div>
+
+        </section>
+
+
+        <!-- FILTER -->
+        <section class="filter-row">
+
+            <button class="filter-btn active" type="button">
+                <i class="fa-solid fa-layer-group"></i>
+                All
+            </button>
+
+            <button class="filter-btn" type="button">
+                <i class="fa-solid fa-film"></i>
+                Movies
+            </button>
+
+            <button class="filter-btn" type="button">
+                <i class="fa-solid fa-tv"></i>
+                Series
+            </button>
+
+        </section>
+
+
+        <!-- EMPTY STATE -->
+        <section class="empty-state">
+
+            <div class="empty-icon">
+                <i class="fa-solid fa-download"></i>
+            </div>
+
+            <h2>No Downloads Yet</h2>
+
+            <p>
+                Movies and episodes saved for offline viewing
+                will appear here.
+            </p>
+
+            <a href="index.html" class="browse-btn">
+                <i class="fa-solid fa-compass"></i>
+                <span>Browse Content</span>
+            </a>
+
+        </section>
+
+
+        <!-- DOWNLOAD LIST
+             Kept hidden until a real download/storage system exists. -->
+        <section class="download-list" hidden>
+
+            <div class="section-heading">
+                <span>DOWNLOADED</span>
+                <button type="button">Manage</button>
+            </div>
+
+            <article class="download-item">
+
+                <div class="download-poster">
+                    <img src="" alt="">
+                </div>
+
+                <div class="download-copy">
+                    <h3>Movie title</h3>
+                    <p>Movie • Offline</p>
+
+                    <div class="download-progress">
+                        <span></span>
+                    </div>
+
+                    <small>Available offline</small>
+                </div>
+
+                <button class="item-more" type="button">
+                    <i class="fa-solid fa-ellipsis-vertical"></i>
+                </button>
+
+            </article>
+
+        </section></main>
+</section>
+
+<section id="profile-view" class="spa-view" hidden>
+  <header class="profile-header">
+    <button class="header-back spa-back" type="button" aria-label="Back to Home"><i class="fa-solid fa-chevron-left"></i></button>
+    <div class="header-title"><span>PROFILE</span></div>
+    <button class="header-action" type="button" aria-label="Settings"><i class="fa-solid fa-gear"></i></button>
+  </header>
+  <main class="profile-content"><!-- PROFILE IDENTITY -->
+        <section class="profile-identity">
+            <div class="avatar-ring">
+                <div class="profile-avatar">
+                    <i class="fa-regular fa-user"></i>
+                </div>
+            </div>
+
+            <h1>Guest User</h1>
+            <p class="profile-status">
+                <span class="status-dot"></span>
+                Guest mode
+            </p>
+        </section>
+
+
+        <!-- ACCOUNT CARD -->
+        <section class="profile-card account-card">
+
+            <div class="account-card-top">
+                <div>
+                    <span class="eyebrow">ACCOUNT</span>
+                    <h2>Welcome to HIV3</h2>
+                </div>
+
+                <div class="account-icon">
+                    <i class="fa-solid fa-user"></i>
+                </div>
+            </div>
+
+            <p class="account-description">
+                Sign in later to keep your personal profile,
+                watch history, favorites and preferences in one place.
+            </p>
+
+            <button class="primary-profile-btn" type="button">
+                <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                <span>Sign In</span>
+            </button>
+
+        </section>
+
+
+        <!-- LIBRARY -->
+        <section class="profile-section">
+
+            <div class="section-heading">
+                <span>YOUR LIBRARY</span>
+            </div>
+
+            <div class="profile-menu">
+
+                <button class="profile-menu-item" type="button">
+                    <span class="menu-icon blue">
+                        <i class="fa-regular fa-heart"></i>
+                    </span>
+
+                    <span class="menu-copy">
+                        <strong>My List</strong>
+                        <small>Your saved movies and series</small>
+                    </span>
+
+                    <i class="fa-solid fa-chevron-right menu-arrow"></i>
+                </button>
+
+
+                <button class="profile-menu-item" type="button">
+                    <span class="menu-icon purple">
+                        <i class="fa-solid fa-clock-rotate-left"></i>
+                    </span>
+
+                    <span class="menu-copy">
+                        <strong>Watch History</strong>
+                        <small>Movies and episodes you've watched</small>
+                    </span>
+
+                    <i class="fa-solid fa-chevron-right menu-arrow"></i>
+                </button>
+
+
+                <button class="profile-menu-item" type="button">
+                    <span class="menu-icon cyan">
+                        <i class="fa-solid fa-download"></i>
+                    </span>
+
+                    <span class="menu-copy">
+                        <strong>Downloads</strong>
+                        <small>Your downloaded content</small>
+                    </span>
+
+                    <i class="fa-solid fa-chevron-right menu-arrow"></i>
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- APP -->
+        <section class="profile-section">
+
+            <div class="section-heading">
+                <span>APP</span>
+            </div>
+
+            <div class="profile-menu">
+
+                <button class="profile-menu-item" type="button">
+                    <span class="menu-icon slate">
+                        <i class="fa-solid fa-gear"></i>
+                    </span>
+
+                    <span class="menu-copy">
+                        <strong>Settings</strong>
+                        <small>Playback, appearance and preferences</small>
+                    </span>
+
+                    <i class="fa-solid fa-chevron-right menu-arrow"></i>
+                </button>
+
+
+                <button class="profile-menu-item" type="button">
+                    <span class="menu-icon slate">
+                        <i class="fa-regular fa-circle-question"></i>
+                    </span>
+
+                    <span class="menu-copy">
+                        <strong>Help & Support</strong>
+                        <small>Get help with HIV3</small>
+                    </span>
+
+                    <i class="fa-solid fa-chevron-right menu-arrow"></i>
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <p class="profile-version">HIV3 • Profile</p></main>
+</section>
+
+<section id="watch-view" class="spa-view" hidden>
+  <header class="profile-header">
+    <button class="header-back" type="button" data-action="back"><i class="fa-solid fa-chevron-left"></i></button>
+    <div class="header-title"><span>WATCH</span></div>
+    <button class="header-action" type="button"><i class="fa-solid fa-ellipsis"></i></button>
+  </header>
+  <main class="watch-page-spa">
+    <section class="player-section">
+      <div class="video-player">
+        <div class="player-placeholder" id="playerPlaceholder"><button class="big-play" id="playButton" type="button">▶</button></div>
+        <video id="videoElement" class="video-element" controls playsinline preload="metadata"></video>
+      </div>
+    </section>
+    <section class="content-info">
+      <div class="title-row"><div><h1 id="contentTitle">Loading...</h1><div class="meta" id="contentMeta">—</div></div><button class="more-btn" id="myListButton" type="button">+</button></div>
+      <div class="actions"><button class="primary-btn" id="watchPlay" type="button">▶ Play</button><button class="secondary-btn" id="watchList" type="button">＋ My List</button></div>
+      <div class="description-section"><h2>ABOUT</h2><p id="contentDescription">Loading description...</p></div>
+      <div class="genres" id="genreContainer"></div>
+      <section class="episodes-section" id="episodesSection" hidden><div class="section-header"><h2>EPISODES</h2></div><div class="episode-list" id="episodeList"></div></section>
+      <section class="similar-section"><div class="section-header"><h2>MORE LIKE THIS</h2></div><div class="similar-list" id="similarList"></div></section>
+    </section>
+  </main>
+</section>
+
+<nav class="bottom-nav">
+
+        <a href="#home" data-spa="home" class="bottom-nav-item">
+            <i class="fa-solid fa-house"></i>
+            <span>Home</span>
+        </a>
+
+        <button class="bottom-nav-item" type="button" data-spa="search">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <span>Search</span>
+        </button>
+
+        <button class="bottom-nav-item" type="button" data-spa="downloads">
+            <i class="fa-solid fa-download"></i>
+            <span>Downloads</span>
+        </button>
+
+        <a href="#profile" data-spa="profile" class="bottom-nav-item active">
+            <i class="fa-regular fa-user"></i>
+            <span>Profile</span>
+        </a>
+
+    </nav>
+
+<script>
+(() => {
+  "use strict";
+
+  const API_BASE_URL = window.HIV3_API_BASE_URL || localStorage.getItem("HIV3_API_BASE_URL") || "http://127.0.0.1:8000";
+  const state = {
+    view: "home",
+    category: "home",
+    cache: {},
+    searchTimer: null,
+    previousView: "home",
+    content: null,
+    streamData: null
+  };
+
+  const $ = (s, root=document) => root.querySelector(s);
+  const $$ = (s, root=document) => [...root.querySelectorAll(s)];
+
+  function escapeHTML(value) {
+    return String(value ?? "")
+      .replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;")
+      .replaceAll('"',"&quot;").replaceAll("'","&#039;");
+  }
+
+  function normalizeItems(data) {
+    if (Array.isArray(data)) return data;
+    if (!data || typeof data !== "object") return [];
+    const keys = ["items","results","data","subjects","list","records"];
+    for (const key of keys) if (Array.isArray(data[key])) return data[key];
+    if (Array.isArray(data.sections)) return data.sections.flatMap(s => Array.isArray(s.items) ? s.items : []);
+    if (Array.isArray(data.operatingList)) return data.operatingList.flatMap(s => Array.isArray(s.items) ? s.items : []);
+    return [];
+  }
+
+  function itemImage(item) {
+    return item?.poster_url || item?.poster || item?.cover || item?.image || item?.thumbnail || item?.backdrop_url || "";
+  }
+
+  function itemTitle(item) {
+    return item?.name || item?.title || item?.subject_name || "Untitled";
+  }
+
+  function itemGenre(item) {
+    const g = item?.genre || item?.genres || item?.category || "";
+    if (Array.isArray(g)) return g.map(x => typeof x === "string" ? x : x?.name).filter(Boolean).join(", ");
+    return String(g || "");
+  }
+
+  function renderCards(container, items, opts={}) {
+    if (!container) return;
+    if (!items.length) {
+      container.innerHTML = '<div class="empty-inline">No content found.</div>';
+      return;
+    }
+    container.innerHTML = items.map((item, i) => {
+      const title = escapeHTML(itemTitle(item));
+      const img = escapeHTML(itemImage(item));
+      const rating = item?.rating ?? item?.score ?? "";
+      const badge = item?.badge || "";
+      const meta = [item?.year || item?.release_date || "", itemGenre(item)].filter(Boolean).join(" · ");
+      const slug = escapeHTML(item?.slug || item?.url || "");
+      const subject = escapeHTML(item?.subject_id || item?.id || "");
+      return `<article class="movie-card api-card" data-title="${title.toLowerCase()}" data-genre="${escapeHTML(itemGenre(item).toLowerCase())}" data-slug="${slug}" data-subject-id="${subject}">
+        <div class="poster">
+          ${img ? `<img src="${img}" alt="${title}" loading="lazy">` : ""}
+          ${opts.rank ? `<span class="rank">${i+1}</span>` : ""}
+          ${rating ? `<span class="rating">${escapeHTML(rating)}</span>` : ""}
+          ${badge ? `<span class="card-badge">${escapeHTML(badge)}</span>` : ""}
+        </div>
+        <h3>${title}</h3><p>${escapeHTML(meta || "HIV3")}</p>
+      </article>`;
+    }).join("");
+    $$(".api-card", container).forEach(card => {
+      card.addEventListener("click", () => openWatch(card.dataset.slug, card.dataset.subjectId));
+    });
+  }
+
+  async function api(path) {
+    const url = API_BASE_URL.replace(/\/$/,"") + path;
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`API ${res.status}`);
+    return res.json();
+  }
+
+  function setActiveNav(view) {
+    $$(".bottom-nav-item").forEach(btn => {
+      btn.classList.toggle("active", btn.dataset.spa === view || (view === "home" && btn.dataset.spa === "home"));
+    });
+  }
+
+  function showView(view) {
+    state.previousView = state.view;
+    state.view = view;
+    $$(".spa-view").forEach(v => v.hidden = v.id !== `${view}-view`);
+    setActiveNav(view);
+    window.scrollTo({top:0, behavior:"smooth"});
+    if (view === "home") history.replaceState({}, "", "#home");
+    else history.replaceState({}, "", "#" + view);
+  }
+
+  function homeCategory(category) {
+    state.category = category;
+    $$(".category-btn").forEach(b => b.classList.toggle("active", b.dataset.action === category));
+    if (category === "home") {
+      showView("home");
+      return;
+    }
+    if (category === "trending") {
+      showView("home");
+      renderTrendingFromHome();
+      $("#trending")?.scrollIntoView({behavior:"smooth",block:"start"});
+      return;
+    }
+    const map = {
+      movies:["/movies","Movies","Top movies from the API"],
+      "tv-series":["/tv-series","TV Series","Series and episodes from the API"],
+      animation:["/animation","Animation","Animated titles from the API"]
+    };
+    if (map[category]) loadCategory(category, ...map[category]);
+  }
+
+  async function loadHome() {
+    try {
+      const data = await api("/home");
+      state.cache.home = data;
+      renderHomeSections(data);
+    } catch (err) {
+      console.warn("HIV3 /home:", err);
+    }
+  }
+
+  function renderHomeSections(data) {
+    const items = normalizeItems(data);
+    if (!items.length) return;
+    const trend = items.slice(0,10);
+    renderCards($("#trending-container"), trend, {rank:true});
+    renderCards($("#popular-container"), items.slice(0,10));
+  }
+
+  function renderTrendingFromHome() {
+    const data = state.cache.home;
+    if (!data) { loadHome(); return; }
+    const items = normalizeItems(data);
+    renderCards($("#trending-container"), items.slice(0,12), {rank:true});
+  }
+
+  async function loadCategory(category, endpoint, title, subtitle) {
+    showView("category");
+    $("#categoryTitle").textContent = title;
+    $("#categorySubtitle").textContent = subtitle;
+    $("#categorySectionTitle").textContent = title;
+    $("#categorySectionMeta").textContent = "Loading...";
+    setCategoryGenres(category);
+    try {
+      if (!state.cache[category]) state.cache[category] = await api(endpoint);
+      const items = normalizeItems(state.cache[category]);
+      $("#categorySectionMeta").textContent = `${items.length} titles`;
+      renderCards($("#categoryResults"), items);
+    } catch (err) {
+      $("#categorySectionMeta").textContent = "Unable to load content";
+      $("#categoryResults").innerHTML = '<div class="empty-inline">The API could not be reached. Check your API base URL.</div>';
+      console.error(`HIV3 ${endpoint}:`, err);
+    }
+  }
+
+  function setCategoryGenres(category) {
+    const genres = {
+      movies:["All","Action","Drama","Comedy","Romance","Thriller","Horror","Sci-Fi"],
+      "tv-series":["All","Drama","Crime","Comedy","Action","Thriller","Mystery"],
+      animation:["All","Animation","Adventure","Fantasy","Comedy","Action","Family"],
+      trending:["All","Trending","Popular","Top Rated"]
+    }[category] || ["All","Action","Drama","Comedy"];
+    const box = $("#categoryGenres");
+    box.innerHTML = genres.map((g,i) => `<button class="genre-btn ${i===0?"active":""}" data-genre="${escapeHTML(g)}">${escapeHTML(g)}</button>`).join("");
+    $$(".genre-btn", box).forEach(btn => btn.addEventListener("click", () => {
+      $$(".genre-btn",box).forEach(b=>b.classList.remove("active"));
+      btn.classList.add("active");
+      filterCards($("#categoryResults"), btn.dataset.genre);
+    }));
+  }
+
+  function filterCards(container, genre) {
+    if (!container) return;
+    const cards = $$(".api-card",container);
+    if (genre === "All") { cards.forEach(c=>c.hidden=false); return; }
+    cards.forEach(c => {
+      const g = (c.dataset.genre || "").toLowerCase();
+      c.hidden = !g.includes(genre.toLowerCase());
+    });
+  }
+
+  async function runSearch(query) {
+    const status=$("#searchStatus"), results=$("#searchResults"), suggestions=$("#searchSuggestions");
+    if (!query.trim()) {
+      status.textContent="Type a title to search";
+      results.innerHTML="";
+      suggestions.innerHTML="";
+      return;
+    }
+    status.textContent="Searching...";
+    try {
+      const data=await api("/search?q="+encodeURIComponent(query.trim())+"&page=1");
+      const items=normalizeItems(data);
+      status.textContent=`${items.length} results`;
+      renderCards(results,items);
+    } catch(err) {
+      status.textContent="Search unavailable";
+      results.innerHTML='<div class="empty-inline">Unable to reach the search API.</div>';
+      console.error("HIV3 search:",err);
+    }
+  }
+
+  async function runSuggestions(query) {
+    const box=$("#searchSuggestions");
+    if (!query.trim()) { box.innerHTML=""; return; }
+    try {
+      const data=await api("/search/suggest?q="+encodeURIComponent(query.trim()));
+      const items=normalizeItems(data);
+      const names=items.slice(0,8).map(itemTitle);
+      box.innerHTML=names.map(n=>`<button class="search-suggestion" type="button">${escapeHTML(n)}</button>`).join("");
+      $$(".search-suggestion",box).forEach(b=>b.addEventListener("click",()=>{$("#searchInput").value=b.textContent;runSearch(b.textContent)}));
+    } catch(_) { box.innerHTML=""; }
+  }
+
+  async function openWatch(slug, subjectId) {
+    state.content=null; state.streamData=null;
+    showView("watch");
+    $("#contentTitle").textContent="Loading...";
+    $("#contentMeta").textContent="—";
+    $("#contentDescription").textContent="Loading description...";
+    $("#genreContainer").innerHTML="";
+    $("#episodesSection").hidden=true;
+    $("#episodeList").innerHTML="";
+    if (!slug) {
+      $("#contentTitle").textContent="Content";
+      if (subjectId) await loadStream(subjectId);
+      return;
+    }
+    try {
+      state.content=await api("/detail/"+encodeURIComponent(slug));
+      renderDetail(state.content);
+    } catch(err) {
+      $("#contentTitle").textContent="Unable to load";
+      $("#contentDescription").textContent="The detail API could not be reached.";
+      console.error("HIV3 detail:",err);
+    }
+  }
+
+  function renderDetail(d) {
+    $("#contentTitle").textContent=d.name||d.title||"Untitled";
+    const meta=[d.rating?`★ ${d.rating}`:"",d.year||d.release_date||"",d.duration||""].filter(Boolean).join(" • ");
+    $("#contentMeta").textContent=meta||"—";
+    $("#contentDescription").textContent=d.description||d.desc||"No description available.";
+    const genres=Array.isArray(d.genres)?d.genres:[];
+    $("#genreContainer").innerHTML=genres.map(g=>`<span class="genre">${escapeHTML(typeof g==="string"?g:(g?.name||""))}</span>`).join("");
+    const episodes=d.episodes||d.episode_list||d.episodes_list;
+    if (Array.isArray(episodes)&&episodes.length) {
+      $("#episodesSection").hidden=false;
+      $("#episodeList").innerHTML=episodes.map((ep,i)=>{
+        const label=ep.name||ep.title||`Episode ${i+1}`;
+        const subject=ep.subject_id||ep.id||"";
+        return `<button class="episode ${i===0?"active":""}" type="button" data-subject="${escapeHTML(subject)}">${escapeHTML(label)}</button>`;
+      }).join("");
+      $$(".episode").forEach(btn=>btn.addEventListener("click",async()=>{
+        $$(".episode").forEach(b=>b.classList.remove("active")); btn.classList.add("active");
+        await loadStream(btn.dataset.subject); startPlayer();
+      }));
+      if (episodes[0]?.subject_id || episodes[0]?.id) loadStream(episodes[0].subject_id||episodes[0].id);
+    } else if (d.subject_id) loadStream(d.subject_id);
+  }
+
+  async function loadStream(subjectId) {
+    try { state.streamData=await api("/api/stream/"+encodeURIComponent(subjectId)); }
+    catch(err) { console.error("HIV3 stream:",err); }
+  }
+
+  function findPlayableURL(data) {
+    if (!data) return null;
+    if (typeof data==="string" && /^https?:\/\//.test(data)) return data;
+    if (Array.isArray(data)) for(const x of data) { const u=findPlayableURL(x); if(u)return u; }
+    if (typeof data==="object") {
+      for (const key of ["url","stream_url","play_url","hls","dash"]) if(typeof data[key]==="string" && /^https?:\/\//.test(data[key])) return data[key];
+      for (const v of Object.values(data)) { const u=(v&&typeof v==="object")?findPlayableURL(v):null; if(u)return u; }
+    }
+    return null;
+  }
+
+  function startPlayer() {
+    const url=findPlayableURL(state.streamData);
+    if (!url) { alert("No playable stream is available yet."); return; }
+    const video=$("#videoElement"); video.src=url; $("#playerPlaceholder").style.display="none"; video.classList.add("active"); video.play().catch(()=>{});
+  }
+
+  function openSearch() { showView("search"); $("#searchInput")?.focus(); }
+  function openDownloads() { showView("downloads"); }
+  function openProfile() { showView("profile"); }
+
+  $$(".category-btn").forEach(btn=>btn.addEventListener("click",()=>btn.dataset.action==="search"?openSearch():homeCategory(btn.dataset.action)));
+  $$("[data-action='search']").forEach(btn=>btn.addEventListener("click",openSearch));
+  $$("[data-action='profile']").forEach(btn=>btn.addEventListener("click",openProfile));
+  $$("[data-action='downloads']").forEach(btn=>btn.addEventListener("click",openDownloads));
+  $$(".bottom-nav-item").forEach(btn=>btn.addEventListener("click",(e)=>{
+    e.preventDefault();
+    const target=btn.dataset.spa;
+    if(target==="search") openSearch();
+    else if(target==="downloads") openDownloads();
+    else if(target==="profile") openProfile();
+    else showView("home");
+  }));
+  $$(".spa-back").forEach(btn=>btn.addEventListener("click",()=>showView("home")));
+  $("#categoryBackHome")?.addEventListener("click",()=>showView("home"));
+  $("#playButton")?.addEventListener("click",startPlayer);
+  $("#watchPlay")?.addEventListener("click",startPlayer);
+  $("#watchList")?.addEventListener("click",()=>toggleMyList());
+  $("#myListButton")?.addEventListener("click",()=>toggleMyList());
+
+  function toggleMyList() {
+    const b=$("#myListButton");
+    const active=b.dataset.active==="true";
+    b.dataset.active=String(!active); b.textContent=active?"":"+";
+    if(!active) b.textContent="✓";
+  }
+
+  $("#searchInput")?.addEventListener("input",e=>{
+    clearTimeout(state.searchTimer);
+    const q=e.target.value;
+    state.searchTimer=setTimeout(()=>{runSuggestions(q);runSearch(q)},350);
+  });
+  $("[data-action='clear-search']")?.addEventListener("click",()=>{$("#searchInput").value="";$("#searchSuggestions").innerHTML="";$("#searchResults").innerHTML="";$("#searchStatus").textContent="Type a title to search";$("#searchInput").focus();});
+
+  // Home hero actions
+  $("[data-action='play']")?.addEventListener("click",()=>openSearch());
+  $("[data-action='details']")?.addEventListener("click",()=>openSearch());
+  $$(".mini-play").forEach(btn=>btn.addEventListener("click",()=>openSearch()));
+
+  window.addEventListener("popstate",()=>{ const h=location.hash.replace("#","")||"home"; if(h==="profile")openProfile();else if(h==="downloads")openDownloads();else if(h==="search")openSearch();else showView("home"); });
+
+  // Initial state
+  const initial=(location.hash||"#home").slice(1);
+  if(["profile","downloads","search"].includes(initial)) showView(initial); else showView("home");
+  loadHome();
+})();
+</script>
+</body>
+</html>
