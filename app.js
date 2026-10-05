@@ -9,7 +9,7 @@
   'use strict';
 
   const HIV3 = {
-    base: window.HIV3_API_BASE_URL || localStorage.getItem('HIV3_API_BASE_URL') || '',
+    base: window.HIV3_API_BASE_URL || localStorage.getItem('HIV3_API_BASE_URL') || 'https://hiv3-stream.onrender.com',
     page: 1,
     category: 'home',
     detail: null,
