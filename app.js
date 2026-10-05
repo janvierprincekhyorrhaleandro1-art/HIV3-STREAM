@@ -9,7 +9,7 @@
   'use strict';
 
   const HIV3 = {
-    base: window.HIV3_API_BASE_URL || localStorage.getItem('HIV3_API_BASE_URL') || 'https://hiv3-stream.onrender.com',
+    base: window.HIV3_API_BASE_URL || localStorage.getItem('HIV3_API_BASE_URL') || '',
     page: 1,
     category: 'home',
     detail: null,
@@ -73,11 +73,13 @@
   function sectionItems(s) { return items({ items: val(s?.items, s?.list, s?.data, s?.subjects) }); }
 
   function showView(name) {
+    const valid = ['home','search','category','downloads','profile','watch'];
+    if (!valid.includes(name)) name = 'home';
     $$('.spa-view').forEach(v => { v.hidden = v.id !== `${name}-view`; v.classList.toggle('active', v.id === `${name}-view`); });
     if (!$('.spa-view')) ['home','search','category','downloads','profile','watch'].forEach(id => { const e = document.getElementById(id); if (e) e.hidden = id !== name; });
     $$('[data-spa], .hiv3-nav-item').forEach(b => b.classList.toggle('active', (b.dataset.spa || b.dataset.action) === name));
     HIV3.category = name;
-    history.replaceState({hiv3:true}, '', `#${name}`);
+    if (location.hash !== `#${name}`) history.replaceState({hiv3:true}, '', `#${name}`);
   }
 
   function navigate(name) { showView(name); window.scrollTo({top:0, behavior:'smooth'}); }
@@ -111,6 +113,11 @@
     navigate('home');
     const trend = $('#trending-container'), popular = $('#popular-container'), cont = $('#continue-container, #continue-watching-container');
     [trend,popular].forEach(c => loading(c));
+    if (!HIV3.base) {
+      const msg = 'API URL not configured yet. Deploy the FastAPI backend on Render, then set HIV3_API_BASE_URL.';
+      [trend,popular].forEach(c => error(c,msg));
+      return null;
+    }
     try {
       const data = await api('/home');
       const ss = sections(data);
@@ -149,9 +156,10 @@
     catch(e){ error(c,e.message); return []; }
   }
 
-  async function suggest(q) { if (!q.trim()) return []; try { return items(await api('/search/suggest',{q:q.trim()})); } catch(e){ console.error(e); return []; } }
+  async function suggest(q) { if (!q.trim() || !HIV3.base) return []; try { return items(await api('/search/suggest',{q:q.trim()})); } catch(e){ console.error(e); return []; } }
   async function search(q,page=1) {
     q=String(q||'').trim(); if(!q)return [];
+    if (!HIV3.base) { const c=$('#search-results, #search-container, #search-grid'); error(c,'API URL not configured yet.'); return []; }
     navigate('search'); const c=$('#search-results, #search-container, #search-grid'); loading(c,`Searching for "${q}"...`);
     try { const list=items(await api('/search',{q,page})); render(c,list); return list; } catch(e){ error(c,e.message); return []; }
   }
